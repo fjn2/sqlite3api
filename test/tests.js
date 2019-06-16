@@ -1,5 +1,7 @@
+/* eslint-disable */
 var chai = require('chai');
 var chaiHttp = require('chai-http');
+require('dotenv').config()
 var server = require('../app');
 var should = chai.should();
 var expect = chai.expect;
@@ -13,10 +15,22 @@ const dir = './test/data/';
 const testFolder = './test/data';
 let testCaseNames = fs.readFileSync(dir + 'description.txt', 'utf8').toString().split('\n');
 
+const { connect, disconnect } = require('../db/sqlite3');
+const { initializeDB } = require('../services/taskForce');
+
+
 
 describe('git_test ', function() {
-	this.timeout(120*1000);
+	before((done) => {
+		connect().then(() => {
+			initializeDB();
+			done();
+		}).catch((err) => {
+			console.log(err);
+		});
+	});
 
+	this.timeout(120*1000);
 	let id = 0;
 	fs.readdirSync(testFolder).sort().forEach(file => {
 		if (file[0] != '.' && file != 'description.txt') {
@@ -27,7 +41,7 @@ describe('git_test ', function() {
 					i += 1;
 					if (line) {
 						event.push(line);
-					}	
+					}
 				});
 				Promise.mapSeries(event, (e) => {
 					let eve = JSON.parse(e);

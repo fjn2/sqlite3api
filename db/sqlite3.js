@@ -28,5 +28,5 @@ const disconnect = () => new Promise((resolve, reject) => {
 module.exports = {
   connect,
   getDB,
-  disconnect
-}
+  disconnect,
+};

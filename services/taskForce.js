@@ -6,7 +6,7 @@ const initializeDB = () => new Promise((resolve, reject) => {
   db.serialize(() => {
     db.run(CREATE_TABLE_EVENTS);
     resolve();
-  })
+  });
 });
 
 const createMockData = () => {
@@ -15,5 +15,5 @@ const createMockData = () => {
 
 module.exports = {
   initializeDB,
-  createMockData
+  createMockData,
 };
