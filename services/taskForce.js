@@ -1,19 +1,19 @@
 const { getDB } = require('../db/sqlite3');
-const { CREATE_TABLE_ACTORS, CREATE_TABLE_EVENTS } = require('./queries');
+const { CREATE_TABLE_EVENTS } = require('./queries');
 
 const initializeDB = () => new Promise((resolve, reject) => {
   const db = getDB();
   db.serialize(() => {
-    db.run(CREATE_TABLE_EVENTS);
-    resolve();
+    db.run(CREATE_TABLE_EVENTS, (err) => {
+      if (!err) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
   });
 });
 
-const createMockData = () => {
-
-};
-
 module.exports = {
   initializeDB,
-  createMockData,
 };

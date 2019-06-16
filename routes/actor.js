@@ -25,11 +25,8 @@ router.put('/', (req, res) => {
 
 router.get('/streak', (req, res) => {
   getStreak().then((resp) => {
-    console.log('FINAL');
-    console.log(resp);
     res.status(200).send(resp);
   }).catch((err) => {
-    console.log('err', err);
     res.status(err.code || 500).send({
       errors: [err.message],
     });

@@ -25,7 +25,9 @@ const ONE_DAY_DIFF = 86400000;
 
 const streakCalculation = (eventsDate) => {
   let maxStreak = 1;
-  const dates = eventsDate.split(',').map(stringDate => new Date(stringDate)).sort();
+  const dates = eventsDate.split(',')
+    .map(stringDate => new Date(stringDate))
+    .sort((a, b) => a - b);
   let inProgressStreak = 1;
   for (let i = 0; i < dates.length - 1; i += 1) {
     const currentDate = new Date(
@@ -38,7 +40,8 @@ const streakCalculation = (eventsDate) => {
       dates[i + 1].getMonth(),
       dates[i + 1].getDate(),
     ).getTime();
-    if (nextDate - currentDate <= ONE_DAY_DIFF) {
+
+    if (nextDate - currentDate === ONE_DAY_DIFF) {
       inProgressStreak += 1;
       if (inProgressStreak > maxStreak) {
         maxStreak = inProgressStreak;
@@ -59,10 +62,10 @@ const getStreak = () => getStreakActors().then((data) => {
 
   const sortedResult = computedData.sort((a, b) => {
     if (a.streak !== b.streak) {
-      return a.streak - b.streak;
+      return b.streak - a.streak;
     }
     if (a.last_event.getTime() !== b.last_event.getTime()) {
-      return a.last_event.getTime() - b.last_event.getTime();
+      return b.last_event.getTime() - a.last_event.getTime();
     }
 
     return a.login - b.login;

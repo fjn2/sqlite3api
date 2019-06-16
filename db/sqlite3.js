@@ -1,5 +1,6 @@
-const debug = require('../debug')('sqlite3');
 const sqlite3 = require('sqlite3').verbose();
+
+const debug = require('../debug')('sqlite3');
 
 let db;
 
@@ -18,7 +19,8 @@ const getDB = () => db;
 const disconnect = () => new Promise((resolve, reject) => {
   db.close((err) => {
     if (err) {
-      return reject(err.message);
+      reject(err.message);
+      return;
     }
     debug('Close the database connection.');
     resolve();
