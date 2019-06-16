@@ -1,27 +1,22 @@
+const debug = require('../debug')('events');
+const { deleteAll, addOne, getAll } = require('../services/events');
 
-var getAllEvents = () => {
+const getEvents = (params) => getAll(params);
 
-};
-
-var addEvent = () => {
-
-};
-
-
-var getByActor = () => {
-
-};
+const addEvent = data => addOne(data).then((newEvent) => {
+	debug('A new event has been created');
+	return newEvent;
+});
 
 
-var eraseEvents = () => {
-
-};
+const eraseEvents = () => deleteAll().then(() => {
+	debug('All events has been removed');
+});
 
 module.exports = {
-	getAllEvents: getAllEvents,
-	addEvent: addEvent,
-	getByActor: getByActor,
-	eraseEvents: eraseEvents
+	getEvents,
+	addEvent,
+	eraseEvents
 };
 
 

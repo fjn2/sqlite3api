@@ -1,33 +1,44 @@
 #!/usr/bin/env node
 
 /**
+ * Read configuration from .env
+ */
+
+require('dotenv').config()
+
+/**
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('GithubDatasetAPI:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('../debug')('GithubDatasetAPI:server');
+const http = require('http');
+const { connect, disconnect } = require('../db/sqlite3');
+const { initializeDB } = require('../services/taskForce');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(8000);
+const port = normalizePort(8000);
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+function startServer() {
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
+
 
 /**
  * Normalize a port into a number, string, or false.
@@ -88,3 +99,23 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * Cleanup befor exit
+ */
+
+process.on('exit', () => {
+  disconnect();
+});
+
+
+function main() {
+  connect().then(() => {
+    initializeDB();
+    startServer();
+  }).catch((err) => {
+    debug(err);
+  });
+}
+
+main();

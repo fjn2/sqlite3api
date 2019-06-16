@@ -1,13 +1,13 @@
 
-var getAllActors = () => {
-	
-};
-
-var updateActor = () => {
+const getAllActors = () => {
 
 };
 
-var getStreak = () => {
+const updateActor = () => {
+
+};
+
+const getStreak = () => {
 
 };
 
